@@ -1,0 +1,21 @@
+DELETE https://639b180fd5141501974ae966.mockapi.io/todo_items/1
+
+###
+
+PUT https://639b180fd5141501974ae966.mockapi.io/todo_items/15
+Content-Type: application/json
+
+{
+    "isDone": true
+}
+
+###
+
+POST https://639b180fd5141501974ae966.mockapi.io/todo_items
+Content-Type: application/json
+
+{
+    "deadline": "1998-02-11T13:23",
+    "text": "Lorem lorem",
+    "isDone": false
+}
