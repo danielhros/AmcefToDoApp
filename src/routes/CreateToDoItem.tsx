@@ -86,8 +86,8 @@ export default function CreateToDoItem() {
             )}
           </div>
           <div className="card-actions flex flex-col justify-end md:flex-row md:flex-grow mt-4">
-            <Link to="/">
-              <button disabled={isLoading} className="btn w-full md:w-36">
+            <Link className="w-full md:w-36" to="/">
+              <button disabled={isLoading} className="btn w-full ">
                 Cancel
               </button>
             </Link>

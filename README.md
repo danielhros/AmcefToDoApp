@@ -8,7 +8,7 @@
 - mockapi
 - formik
 
-You can find deployed version here: TODO
+You can find deployed version here: https://magical-sundae-8c8af6.netlify.app/
 Have a nice day ☀️
 
 ### How much it took me to finish this project?
