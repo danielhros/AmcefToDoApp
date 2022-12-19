@@ -19,3 +19,50 @@ Content-Type: application/json
     "text": "Lorem lorem",
     "isDone": false
 }
+
+###
+
+GET https://639b180fd5141501974ae966.mockapi.io/lists
+
+###
+
+GET https://639b180fd5141501974ae966.mockapi.io/lists/1
+
+###
+
+GET https://639b180fd5141501974ae966.mockapi.io/lists/1/items
+
+###
+
+GET https://639b180fd5141501974ae966.mockapi.io/lists/1/items/1
+
+
+###
+
+PUT https://639b180fd5141501974ae966.mockapi.io/lists/1/items/1
+Content-Type: application/json
+
+{
+    "isDone": true
+}
+
+###
+
+POST https://639b180fd5141501974ae966.mockapi.io/lists/1/items
+Content-Type: application/json
+
+{
+    "deadline": "1998-02-11T13:23",
+    "text": "Lorem lorem",
+    "title": "test",
+    "isDone": false
+}
+
+###
+
+POST https://639b180fd5141501974ae966.mockapi.io/lists
+Content-Type: application/json
+
+{
+    "title": "New list"
+}

@@ -15,7 +15,7 @@ export default function ToDoItem({ todoItem }: ToDoItemProps) {
   const { mutate: deleteItem, isLoading: deleteItemIsLoading } = useMutation({
     mutationFn: todoService.deleteToDoItem,
     onSuccess: () => {
-      queryClient.invalidateQueries(["todos"]);
+      queryClient.invalidateQueries(["todoList", todoItem.listId]);
     },
     onError() {
       toast.error("Something went wrong deleting todo item");
@@ -24,9 +24,9 @@ export default function ToDoItem({ todoItem }: ToDoItemProps) {
 
   const { mutate: updateComplete, isLoading: updateItemIsLoading } =
     useMutation({
-      mutationFn: todoService.updateTodoComplete,
+      mutationFn: todoService.updateToDoComplete,
       onSuccess: () => {
-        queryClient.invalidateQueries(["todos"]);
+        queryClient.invalidateQueries(["todoList", todoItem.listId]);
       },
       onError() {
         toast.error("Something went wrong updating completes of todo item");
@@ -41,7 +41,11 @@ export default function ToDoItem({ todoItem }: ToDoItemProps) {
         type="checkbox"
         disabled={isLoading}
         onChange={() =>
-          updateComplete({ id: todoItem.id, isDone: !todoItem.isDone })
+          updateComplete({
+            id: todoItem.id,
+            isDone: !todoItem.isDone,
+            todoListId: todoItem.listId,
+          })
         }
         checked={todoItem.isDone}
         className="checkbox mr-5"
@@ -66,7 +70,9 @@ export default function ToDoItem({ todoItem }: ToDoItemProps) {
       <button
         disabled={isLoading}
         className="btn"
-        onClick={() => deleteItem(todoItem.id)}
+        onClick={() =>
+          deleteItem({ id: todoItem.id, todoListId: todoItem.listId })
+        }
       >
         <FaTrashAlt size={20} />
       </button>

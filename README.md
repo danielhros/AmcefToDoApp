@@ -22,6 +22,7 @@ Have a nice day ☀️
 - coding
   - screens (tailwindcss + daisyUI): 4h
   - logic: 4h
+  - adding multiple todo list functionality: 4h
 
 ### Figma prototype
 

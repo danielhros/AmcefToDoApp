@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, redirect, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,20 +21,28 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function CreateToDoItem() {
+  const { id: todoListId } = useParams();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const { mutate: createItem, isLoading } = useMutation({
     mutationFn: todoService.createToDoItem,
     onSuccess: () => {
-      queryClient.invalidateQueries(["todos"]);
-      navigate("/");
+      queryClient.invalidateQueries(["todoList", todoListId]);
+      navigate(`/list/${todoListId}`);
     },
     onError() {
       toast.error("Something went wrong creating new todo item");
     },
   });
 
+  // I didn't have time, this is just workaround
+  if (todoListId === undefined) {
+    redirect("/404");
+    return <></>;
+  }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -43,9 +51,10 @@ export default function CreateToDoItem() {
     },
     validationSchema,
     onSubmit: (formValues) => {
-      createItem({ ...formValues, isDone: false });
+      createItem({ newToDoItem: { ...formValues, isDone: false }, todoListId });
     },
   });
+
   return (
     <div className="card bg-neutral text-primary-content">
       <div className="card-body">
@@ -108,8 +117,8 @@ export default function CreateToDoItem() {
             )}
           </div>
           <div className="card-actions flex flex-col justify-end md:flex-row md:flex-grow mt-4">
-            <Link className="w-full md:w-36" to="/">
-              <button disabled={isLoading} className="btn w-full ">
+            <Link className="w-full md:w-36" to={`/list/${todoListId}`}>
+              <button disabled={isLoading} className="btn w-full">
                 Cancel
               </button>
             </Link>
