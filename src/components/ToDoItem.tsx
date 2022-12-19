@@ -47,6 +47,13 @@ export default function ToDoItem({ todoItem }: ToDoItemProps) {
         className="checkbox mr-5"
       />
       <div className="grow flex flex-col">
+        <h2
+          className={`text-sky-400 font-bold ${
+            todoItem.isDone && "line-through"
+          }`}
+        >
+          {todoItem.title}
+        </h2>
         <p className={`${todoItem.isDone && "line-through"}`}>
           {todoItem.text}
         </p>

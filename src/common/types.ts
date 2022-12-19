@@ -3,6 +3,7 @@ export type ToDoItem = {
   text: string;
   deadline: string;
   isDone: boolean;
+  title: string;
 };
 
 export type NewToDoItem = {

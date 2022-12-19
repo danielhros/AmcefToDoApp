@@ -47,8 +47,10 @@ export default function ToDoList() {
   let todoItems = filterAndSortTodoItems(allTodoItems, activeItemType);
 
   if (searchText != "") {
-    todoItems = todoItems.filter((todoItem) =>
-      todoItem.text.toLowerCase().includes(searchText.toLowerCase())
+    todoItems = todoItems.filter(
+      (todoItem) =>
+        todoItem.text.toLowerCase().includes(searchText.toLowerCase()) ||
+        todoItem.title.toLowerCase().includes(searchText.toLowerCase())
     );
   }
 

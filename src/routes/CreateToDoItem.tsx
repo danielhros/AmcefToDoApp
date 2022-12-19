@@ -8,8 +8,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
+  title: Yup.string()
+    .min(2, "Title is too short")
+    .max(30, "Title is too long, max 30 characters")
+    .required("Title field is required"),
   text: Yup.string()
-    .min(2, "Text is too short!")
+    .min(2, "Text is too short")
     .required("Text field is required"),
   deadline: Yup.date()
     .typeError("${value}")
@@ -33,6 +37,7 @@ export default function CreateToDoItem() {
 
   const formik = useFormik({
     initialValues: {
+      title: "",
       text: "",
       deadline: "",
     },
@@ -49,13 +54,30 @@ export default function CreateToDoItem() {
         <form onSubmit={formik.handleSubmit}>
           <div className="form-control w-full">
             <label className="label">
+              <span className="label-text">Title*</span>
+            </label>
+            <input
+              id="title"
+              name="title"
+              type="text"
+              autoFocus
+              onChange={formik.handleChange}
+              value={formik.values.title}
+              placeholder="Title"
+              className={`input input-bordered w-full mb-2 ${
+                formik.touched.title && formik.errors.title && "border-red-400"
+              }`}
+            />
+            {formik.touched.title && formik.errors.title && (
+              <span className="text-red-400">{formik.errors.title}</span>
+            )}
+            <label className="label">
               <span className="label-text">Text*</span>
             </label>
             <input
               id="text"
               name="text"
               type="text"
-              autoFocus
               onChange={formik.handleChange}
               value={formik.values.text}
               placeholder="Text"
