@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ToDoItem from "../components/ToDoItem";
 import { ToDoItem as ToDoItemType } from "../common/types";
-import { Link, redirect, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { todoService } from "../api/todoService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -38,7 +38,7 @@ export default function ToDoList() {
   const [todoTitle, setTodoTitle] = useState("Loading..");
   const [activeItemType, setActiveItemType] = useState(itemTypes[0]);
 
-  const { id: todoListId } = useParams();
+  const { id: todoListId = "" } = useParams();
 
   const { mutate: deleteList, isLoading: deleteListIsLoading } = useMutation({
     mutationFn: todoService.deleteToDoList,
@@ -52,13 +52,6 @@ export default function ToDoList() {
     },
   });
 
-  // I didn't have time, this is just workaround
-  if (todoListId === undefined) {
-    redirect("/404");
-    return <></>;
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { isLoading: todoItemsLoading } = useQuery({
     queryKey: ["todoList", todoListId],
     queryFn: () => todoService.getAllToDos(todoListId),
@@ -72,15 +65,21 @@ export default function ToDoList() {
     },
   });
 
-  let todoItems = filterAndSortTodoItems(allTodoItems, activeItemType);
+  let todoItems = useMemo(
+    () => filterAndSortTodoItems(allTodoItems, activeItemType),
+    [allTodoItems, activeItemType]
+  );
 
-  if (searchText != "") {
-    todoItems = todoItems.filter(
-      (todoItem) =>
-        todoItem.text.toLowerCase().includes(searchText.toLowerCase()) ||
-        todoItem.title.toLowerCase().includes(searchText.toLowerCase())
-    );
-  }
+  todoItems = useMemo(() => {
+    if (searchText != "") {
+      return todoItems.filter(
+        (todoItem) =>
+          todoItem.text.toLowerCase().includes(searchText.toLowerCase()) ||
+          todoItem.title.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+    return todoItems;
+  }, [searchText, todoItems]);
 
   return (
     <>

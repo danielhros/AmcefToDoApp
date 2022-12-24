@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, redirect, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function CreateToDoItem() {
-  const { id: todoListId } = useParams();
+  const { id: todoListId = "" } = useParams();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -36,13 +36,6 @@ export default function CreateToDoItem() {
     },
   });
 
-  // I didn't have time, this is just workaround
-  if (todoListId === undefined) {
-    redirect("/404");
-    return <></>;
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({
     initialValues: {
       title: "",
